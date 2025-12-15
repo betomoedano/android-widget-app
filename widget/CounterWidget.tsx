@@ -50,6 +50,7 @@ export function CounterWidget({
         padding: 12,
         flexDirection: "column",
       }}
+      clickAction="OPEN_APP"
     >
       {/* Header with Expo branding */}
       <FlexWidget
@@ -60,7 +61,6 @@ export function CounterWidget({
           justifyContent: "flex-start",
           height: "wrap_content",
         }}
-        clickAction="OPEN_APP"
       >
         <ImageWidget
           image={require("../assets/widget-preview/hello.png")}
