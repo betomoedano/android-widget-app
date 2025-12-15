@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import type { WidgetConfigurationScreenProps } from "react-native-android-widget";
 import Storage from "expo-sqlite/kv-store";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const COLORS = [
-  { name: "White", value: "#FFFFFF" },
+  { name: "Dark", value: "#1F2937" },
   { name: "Blue", value: "#3B82F6" },
   { name: "Green", value: "#22C55E" },
   { name: "Purple", value: "#A855F7" },
-  { name: "Orange", value: "#F97316" },
   { name: "Pink", value: "#EC4899" },
-  { name: "Dark", value: "#1F2937" },
+  { name: "Orange", value: "#F97316" },
+  { name: "White", value: "#FFFFFF" },
 ];
 
 export function getWidgetConfigStorageKey(widgetId: number) {
@@ -27,7 +27,7 @@ export function WidgetConfigurationScreen({
   const existingConfig = Storage.getItemSync(storageKey);
   const initialColor = existingConfig
     ? JSON.parse(existingConfig).backgroundColor
-    : "#FFFFFF";
+    : "#1F2937";
 
   const [selectedColor, setSelectedColor] = useState(initialColor);
 
@@ -95,15 +95,86 @@ export function WidgetConfigurationScreen({
           <View
             style={[styles.previewWidget, { backgroundColor: selectedColor }]}
           >
+            {/* Header with Expo branding */}
+            <View style={styles.previewHeader}>
+              <Image
+                source={require("../assets/widget-preview/hello.png")}
+                style={styles.previewLogo}
+              />
+              <Text
+                style={[
+                  styles.previewBranding,
+                  selectedColor === "#FFFFFF" || selectedColor === "#F97316"
+                    ? styles.brandingDark
+                    : styles.brandingLight,
+                ]}
+              >
+                Powered by Expo
+              </Text>
+            </View>
+
+            {/* Counter display */}
+            <View style={styles.previewCounter}>
+              <View
+                style={[
+                  styles.previewButton,
+                  selectedColor === "#FFFFFF" || selectedColor === "#F97316"
+                    ? styles.buttonLight
+                    : styles.buttonDark,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.previewButtonText,
+                    selectedColor === "#FFFFFF" || selectedColor === "#F97316"
+                      ? styles.darkText
+                      : styles.lightText,
+                  ]}
+                >
+                  −
+                </Text>
+              </View>
+              <Text
+                style={[
+                  styles.previewCount,
+                  selectedColor === "#FFFFFF" || selectedColor === "#F97316"
+                    ? styles.darkText
+                    : styles.lightText,
+                ]}
+              >
+                0
+              </Text>
+              <View
+                style={[
+                  styles.previewButton,
+                  selectedColor === "#FFFFFF" || selectedColor === "#F97316"
+                    ? styles.buttonLight
+                    : styles.buttonDark,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.previewButtonText,
+                    selectedColor === "#FFFFFF" || selectedColor === "#F97316"
+                      ? styles.darkText
+                      : styles.lightText,
+                  ]}
+                >
+                  +
+                </Text>
+              </View>
+            </View>
+
+            {/* Footer */}
             <Text
               style={[
-                styles.previewText,
+                styles.previewFooter,
                 selectedColor === "#FFFFFF" || selectedColor === "#F97316"
-                  ? styles.darkText
-                  : styles.lightText,
+                  ? styles.brandingDark
+                  : styles.brandingLight,
               ]}
             >
-              - 0 +
+              COUNTER
             </Text>
           </View>
         </View>
@@ -179,17 +250,67 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   previewWidget: {
-    height: 100,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
+    height: 140,
+    borderRadius: 24,
+    padding: 16,
+    justifyContent: "space-between",
     borderWidth: 1,
     borderColor: "#E5E7EB",
   },
-  previewText: {
-    fontSize: 32,
+  previewHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  previewLogo: {
+    width: 16,
+    height: 16,
+    borderRadius: 4,
+  },
+  previewBranding: {
+    fontSize: 11,
+    marginLeft: 6,
+    fontWeight: "500",
+  },
+  brandingLight: {
+    color: "rgba(255,255,255,0.4)",
+  },
+  brandingDark: {
+    color: "rgba(0,0,0,0.3)",
+  },
+  previewCounter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 20,
+  },
+  previewButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonDark: {
+    backgroundColor: "rgba(255,255,255,0.15)",
+  },
+  buttonLight: {
+    backgroundColor: "rgba(0,0,0,0.08)",
+  },
+  previewButtonText: {
+    fontSize: 24,
+    fontWeight: "300",
+  },
+  previewCount: {
+    fontSize: 48,
+    fontWeight: "200",
+    minWidth: 60,
+    textAlign: "center",
+  },
+  previewFooter: {
+    fontSize: 10,
     fontWeight: "600",
-    letterSpacing: 16,
+    textAlign: "center",
+    letterSpacing: 2,
   },
   darkText: {
     color: "#1F2937",
