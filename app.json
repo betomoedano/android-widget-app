@@ -3,6 +3,7 @@
     "name": "android-widget-app",
     "slug": "android-widget-app",
     "version": "1.0.0",
+    "scheme": "androidwidgetapp",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -42,10 +43,22 @@
               "description": "This is my first widget",
               "previewImage": "./assets/widget-preview/hello.png",
               "updatePeriodMillis": 1800000
+            },
+            {
+              "name": "Counter",
+              "label": "My Counter Widget",
+              "minWidth": "320dp",
+              "minHeight": "120dp",
+              "targetCellWidth": 5,
+              "targetCellHeight": 2,
+              "description": "This is my second widget",
+              "previewImage": "./assets/widget-preview/hello.png",
+              "updatePeriodMillis": 1800000
             }
           ]
         }
-      ]
+      ],
+      "expo-sqlite"
     ]
   }
 }

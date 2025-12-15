@@ -9,16 +9,17 @@ export function HelloWidget() {
         width: "match_parent",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#ffffff",
+        backgroundColor: "#000000",
         borderRadius: 16,
       }}
+      clickAction="OPEN_APP"
     >
       <TextWidget
-        text="Hello"
+        text="Open App"
         style={{
           fontSize: 32,
           fontFamily: "Inter",
-          color: "#000000",
+          color: "#ffffff",
         }}
       />
     </FlexWidget>

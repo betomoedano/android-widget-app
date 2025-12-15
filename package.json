@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "expo": "^54.0.29",
+    "expo-sqlite": "~16.0.10",
     "expo-status-bar": "3.0.10-canary-20251212-acb11f2",
     "react": "19.1.0",
     "react-native": "0.81.5",
