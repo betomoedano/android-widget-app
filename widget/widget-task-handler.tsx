@@ -57,9 +57,19 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
 
       break;
     }
-    case "WIDGET_RESIZED":
-      // Not needed for now
+    case "WIDGET_RESIZED": {
+      if (widgetInfo.widgetName === "Counter") {
+        const stored = Storage.getItemSync(COUNTER_STORAGE_KEY);
+        const count = stored ? Number(stored) : 0;
+        const backgroundColor = getStoredBackgroundColor();
+        props.renderWidget(
+          <CounterWidget count={count} backgroundColor={backgroundColor} />
+        );
+      } else {
+        props.renderWidget(<Widget {...widgetInfo} />);
+      }
       break;
+    }
 
     case "WIDGET_DELETED":
       // Not needed for now

@@ -47,9 +47,8 @@ export function CounterWidget({
         width: "match_parent",
         backgroundColor: backgroundColor,
         borderRadius: 24,
-        padding: 16,
+        padding: 12,
         flexDirection: "column",
-        justifyContent: "space-between",
       }}
     >
       {/* Header with Expo branding */}
@@ -65,38 +64,38 @@ export function CounterWidget({
       >
         <ImageWidget
           image={require("../assets/widget-preview/hello.png")}
-          imageWidth={16}
-          imageHeight={16}
-          radius={4}
+          imageWidth={14}
+          imageHeight={14}
+          radius={3}
         />
         <TextWidget
           text="Powered by Expo"
           style={{
-            fontSize: 11,
+            fontSize: 10,
             color: subtleColor,
             fontWeight: "500",
-            marginLeft: 6,
+            marginLeft: 4,
           }}
         />
       </FlexWidget>
 
-      {/* Main counter section */}
+      {/* Main counter section - takes remaining space and centers content */}
       <FlexWidget
         style={{
           width: "match_parent",
+          flex: 1,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
-          height: "wrap_content",
-          flexGap: 20,
+          flexGap: 12,
         }}
       >
         {/* Decrement button */}
         <FlexWidget
           style={{
-            width: 52,
-            height: 52,
-            borderRadius: 26,
+            width: 44,
+            height: 44,
+            borderRadius: 22,
             backgroundColor: buttonBg,
             alignItems: "center",
             justifyContent: "center",
@@ -107,7 +106,7 @@ export function CounterWidget({
           <TextWidget
             text="-"
             style={{
-              fontSize: 28,
+              fontSize: 24,
               color: textColor,
               fontWeight: "300",
             }}
@@ -115,31 +114,22 @@ export function CounterWidget({
         </FlexWidget>
 
         {/* Count display */}
-        <FlexWidget
+        <TextWidget
+          text={`${count}`}
           style={{
-            width: 80,
-            alignItems: "center",
-            justifyContent: "center",
-            height: "wrap_content",
+            fontSize: 48,
+            color: textColor,
+            fontWeight: "200",
+            fontFamily: "sans-serif-light",
           }}
-        >
-          <TextWidget
-            text={`${count}`}
-            style={{
-              fontSize: 56,
-              color: textColor,
-              fontWeight: "200",
-              fontFamily: "sans-serif-light",
-            }}
-          />
-        </FlexWidget>
+        />
 
         {/* Increment button */}
         <FlexWidget
           style={{
-            width: 52,
-            height: 52,
-            borderRadius: 26,
+            width: 44,
+            height: 44,
+            borderRadius: 22,
             backgroundColor: buttonBg,
             alignItems: "center",
             justifyContent: "center",
@@ -150,7 +140,7 @@ export function CounterWidget({
           <TextWidget
             text="+"
             style={{
-              fontSize: 28,
+              fontSize: 24,
               color: textColor,
               fontWeight: "300",
             }}
@@ -170,7 +160,7 @@ export function CounterWidget({
         <TextWidget
           text="COUNTER"
           style={{
-            fontSize: 10,
+            fontSize: 9,
             color: subtleColor,
             fontWeight: "600",
             letterSpacing: 2,

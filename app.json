@@ -47,14 +47,15 @@
             {
               "name": "Counter",
               "label": "My Counter Widget",
-              "minWidth": "320dp",
-              "minHeight": "120dp",
-              "targetCellWidth": 5,
+              "minWidth": "180dp",
+              "minHeight": "100dp",
+              "targetCellWidth": 3,
               "targetCellHeight": 2,
               "description": "This is my second widget",
               "previewImage": "./assets/widget-preview/hello.png",
               "updatePeriodMillis": 1800000,
-              "widgetFeatures": "reconfigurable"
+              "widgetFeatures": "reconfigurable",
+              "resizeMode": "horizontal|vertical"
             }
           ]
         }
