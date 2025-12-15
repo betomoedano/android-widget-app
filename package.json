@@ -14,7 +14,8 @@
     "expo-status-bar": "3.0.10-canary-20251212-acb11f2",
     "react": "19.1.0",
     "react-native": "0.81.5",
-    "react-native-android-widget": "^0.17.2"
+    "react-native-android-widget": "^0.17.2",
+    "react-native-safe-area-context": "^5.6.2"
   },
   "devDependencies": {
     "@types/react": "~19.1.1",

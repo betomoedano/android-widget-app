@@ -53,7 +53,8 @@
               "targetCellHeight": 2,
               "description": "This is my second widget",
               "previewImage": "./assets/widget-preview/hello.png",
-              "updatePeriodMillis": 1800000
+              "updatePeriodMillis": 1800000,
+              "widgetFeatures": "reconfigurable"
             }
           ]
         }

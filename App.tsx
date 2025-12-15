@@ -5,6 +5,7 @@ import { WidgetPreview } from "react-native-android-widget";
 import { HelloWidget } from "./widget/HelloWidget";
 import { COUNTER_STORAGE_KEY } from "./widget/widget-task-handler";
 import Storage from "expo-sqlite/kv-store";
+import { StatusBar } from "expo-status-bar";
 
 function getStoredCount() {
   const stored = Storage.getItemSync(COUNTER_STORAGE_KEY);
@@ -18,7 +19,6 @@ export default function App() {
   React.useEffect(() => {
     const subscription = AppState.addEventListener("change", (state) => {
       if (state === "active") {
-        console.log("[App] AppState is active, refreshing count");
         setCount(getStoredCount());
       }
     });
@@ -26,14 +26,17 @@ export default function App() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.bigText}>{count}</Text>
-      <WidgetPreview
-        renderWidget={() => <HelloWidget />}
-        width={320}
-        height={200}
-      />
-    </View>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.bigText}>{count}</Text>
+        <WidgetPreview
+          renderWidget={() => <HelloWidget />}
+          width={320}
+          height={200}
+        />
+      </View>
+      <StatusBar style="dark" />
+    </>
   );
 }
 

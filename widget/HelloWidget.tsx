@@ -1,5 +1,9 @@
 import React from "react";
-import { FlexWidget, TextWidget } from "react-native-android-widget";
+import {
+  FlexWidget,
+  TextWidget,
+  ImageWidget,
+} from "react-native-android-widget";
 
 export function HelloWidget() {
   return (
@@ -14,6 +18,11 @@ export function HelloWidget() {
       }}
       clickAction="OPEN_APP"
     >
+      <ImageWidget
+        image={require("../assets/widget-preview/counter.png")}
+        imageWidth={32}
+        imageHeight={32}
+      />
       <TextWidget
         text="Open App"
         style={{
