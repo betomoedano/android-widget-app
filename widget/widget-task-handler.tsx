@@ -1,10 +1,12 @@
 import React from "react";
 import { Linking } from "react-native";
 import Storage from "expo-sqlite/kv-store";
-import type { WidgetTaskHandlerProps } from "react-native-android-widget";
+import type {
+  ColorProp,
+  WidgetTaskHandlerProps,
+} from "react-native-android-widget";
 import { HelloWidget } from "./HelloWidget";
 import { CounterWidget } from "./CounterWidget";
-import { getWidgetConfigStorageKey } from "./WidgetConfigurationScreen";
 
 const nameToWidget = {
   // Hello will be the **name** with which we will reference our widget.
@@ -13,14 +15,11 @@ const nameToWidget = {
 };
 
 export const COUNTER_STORAGE_KEY = "CounterWidget:count";
+export const COUNTER_BACKGROUND_KEY = "CounterWidget:backgroundColor";
 
-function getWidgetConfig(widgetId: number) {
-  const storageKey = getWidgetConfigStorageKey(widgetId);
-  const stored = Storage.getItemSync(storageKey);
-  if (stored) {
-    return JSON.parse(stored);
-  }
-  return { backgroundColor: "#FFFFFF" };
+export function getStoredBackgroundColor(): ColorProp {
+  return (Storage.getItemSync(COUNTER_BACKGROUND_KEY) ||
+    "#1F2937") as ColorProp;
 }
 
 export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
@@ -34,12 +33,9 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
       if (widgetInfo.widgetName === "Counter") {
         const stored = Storage.getItemSync(COUNTER_STORAGE_KEY);
         const count = stored ? Number(stored) : 0;
-        const config = getWidgetConfig(widgetInfo.widgetId);
+        const backgroundColor = getStoredBackgroundColor();
         props.renderWidget(
-          <CounterWidget
-            count={count}
-            backgroundColor={config.backgroundColor}
-          />
+          <CounterWidget count={count} backgroundColor={backgroundColor} />
         );
       } else {
         props.renderWidget(<Widget {...widgetInfo} />);
@@ -51,12 +47,9 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
       if (widgetInfo.widgetName === "Counter") {
         const stored = Storage.getItemSync(COUNTER_STORAGE_KEY);
         const count = stored ? Number(stored) : 0;
-        const config = getWidgetConfig(widgetInfo.widgetId);
+        const backgroundColor = getStoredBackgroundColor();
         props.renderWidget(
-          <CounterWidget
-            count={count}
-            backgroundColor={config.backgroundColor}
-          />
+          <CounterWidget count={count} backgroundColor={backgroundColor} />
         );
       } else {
         props.renderWidget(<Widget {...widgetInfo} />);
@@ -80,9 +73,8 @@ export async function widgetTaskHandler(props: WidgetTaskHandlerProps) {
 
       if (widgetInfo.widgetName === "Counter") {
         const currentValue = Number(props.clickActionData?.value) || 0;
-        const backgroundColor =
-          props.clickActionData?.backgroundColor ||
-          getWidgetConfig(widgetInfo.widgetId).backgroundColor;
+        const backgroundColor = (props.clickActionData?.backgroundColor ||
+          getStoredBackgroundColor()) as ColorProp;
         const count =
           currentValue + (props.clickAction === "INCREMENT" ? 1 : -1);
         console.log(

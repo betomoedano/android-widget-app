@@ -3,8 +3,12 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import type { WidgetConfigurationScreenProps } from "react-native-android-widget";
 import Storage from "expo-sqlite/kv-store";
 import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  COUNTER_BACKGROUND_KEY,
+  getStoredBackgroundColor,
+} from "./widget-task-handler";
 
-const COLORS = [
+export const COLORS = [
   { name: "Dark", value: "#1F2937" },
   { name: "Blue", value: "#3B82F6" },
   { name: "Green", value: "#22C55E" },
@@ -14,35 +18,36 @@ const COLORS = [
   { name: "White", value: "#FFFFFF" },
 ];
 
-export function getWidgetConfigStorageKey(widgetId: number) {
-  return `widget-config-${widgetId}`;
-}
-
 export function WidgetConfigurationScreen({
   widgetInfo,
   setResult,
   renderWidget,
 }: WidgetConfigurationScreenProps) {
-  const storageKey = getWidgetConfigStorageKey(widgetInfo.widgetId);
-  const existingConfig = Storage.getItemSync(storageKey);
-  const initialColor = existingConfig
-    ? JSON.parse(existingConfig).backgroundColor
-    : "#1F2937";
+  const initialColor = getStoredBackgroundColor() as string;
 
   const [selectedColor, setSelectedColor] = useState(initialColor);
 
+  // Button colors matching the widget - colorful backgrounds get tinted versions
+  const buttonColors: Record<string, string> = {
+    "#1F2937": "#374151",
+    "#FFFFFF": "#E5E7EB",
+    "#F97316": "#E5E7EB",
+    "#3B82F6": "#60A5FA",
+    "#22C55E": "#4ADE80",
+    "#A855F7": "#C084FC",
+    "#EC4899": "#F472B6",
+  };
+  const buttonBg = buttonColors[selectedColor] || "#374151";
+  const isDark = selectedColor !== "#FFFFFF" && selectedColor !== "#F97316";
+
   const handleSave = () => {
-    // Save the configuration
-    Storage.setItemSync(
-      storageKey,
-      JSON.stringify({ backgroundColor: selectedColor })
-    );
+    // Save the background color
+    Storage.setItemSync(COUNTER_BACKGROUND_KEY, selectedColor);
 
     // Re-render the widget with the new configuration
-    // We need to import and render the widget here
     const { CounterWidget } = require("./CounterWidget");
-    const countKey = "CounterWidget:count";
-    const stored = Storage.getItemSync(countKey);
+    const { COUNTER_STORAGE_KEY } = require("./widget-task-handler");
+    const stored = Storage.getItemSync(COUNTER_STORAGE_KEY);
     const count = stored ? Number(stored) : 0;
 
     renderWidget(
@@ -104,9 +109,7 @@ export function WidgetConfigurationScreen({
               <Text
                 style={[
                   styles.previewBranding,
-                  selectedColor === "#FFFFFF" || selectedColor === "#F97316"
-                    ? styles.brandingDark
-                    : styles.brandingLight,
+                  isDark ? styles.brandingLight : styles.brandingDark,
                 ]}
               >
                 Powered by Expo
@@ -116,19 +119,12 @@ export function WidgetConfigurationScreen({
             {/* Counter display */}
             <View style={styles.previewCounter}>
               <View
-                style={[
-                  styles.previewButton,
-                  selectedColor === "#FFFFFF" || selectedColor === "#F97316"
-                    ? styles.buttonLight
-                    : styles.buttonDark,
-                ]}
+                style={[styles.previewButton, { backgroundColor: buttonBg }]}
               >
                 <Text
                   style={[
                     styles.previewButtonText,
-                    selectedColor === "#FFFFFF" || selectedColor === "#F97316"
-                      ? styles.darkText
-                      : styles.lightText,
+                    isDark ? styles.lightText : styles.darkText,
                   ]}
                 >
                   −
@@ -137,27 +133,18 @@ export function WidgetConfigurationScreen({
               <Text
                 style={[
                   styles.previewCount,
-                  selectedColor === "#FFFFFF" || selectedColor === "#F97316"
-                    ? styles.darkText
-                    : styles.lightText,
+                  isDark ? styles.lightText : styles.darkText,
                 ]}
               >
                 0
               </Text>
               <View
-                style={[
-                  styles.previewButton,
-                  selectedColor === "#FFFFFF" || selectedColor === "#F97316"
-                    ? styles.buttonLight
-                    : styles.buttonDark,
-                ]}
+                style={[styles.previewButton, { backgroundColor: buttonBg }]}
               >
                 <Text
                   style={[
                     styles.previewButtonText,
-                    selectedColor === "#FFFFFF" || selectedColor === "#F97316"
-                      ? styles.darkText
-                      : styles.lightText,
+                    isDark ? styles.lightText : styles.darkText,
                   ]}
                 >
                   +
@@ -169,9 +156,7 @@ export function WidgetConfigurationScreen({
             <Text
               style={[
                 styles.previewFooter,
-                selectedColor === "#FFFFFF" || selectedColor === "#F97316"
-                  ? styles.brandingDark
-                  : styles.brandingLight,
+                isDark ? styles.brandingLight : styles.brandingDark,
               ]}
             >
               COUNTER
@@ -272,10 +257,10 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   brandingLight: {
-    color: "rgba(255,255,255,0.4)",
+    color: "#FFFFFF",
   },
   brandingDark: {
-    color: "rgba(0,0,0,0.3)",
+    color: "#000000",
   },
   previewCounter: {
     flexDirection: "row",
@@ -289,12 +274,6 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: "center",
     justifyContent: "center",
-  },
-  buttonDark: {
-    backgroundColor: "rgba(255,255,255,0.15)",
-  },
-  buttonLight: {
-    backgroundColor: "rgba(0,0,0,0.08)",
   },
   previewButtonText: {
     fontSize: 24,

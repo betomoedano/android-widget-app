@@ -25,9 +25,20 @@ export function CounterWidget({
     backgroundColor === "#EC4899";
 
   const textColor = isDarkBackground ? "#FFFFFF" : "#1F2937";
-  // Using semi-transparent colors approximated as solid hex
-  const subtleColor = isDarkBackground ? "#9CA3AF" : "#9CA3AF";
-  const buttonBg = isDarkBackground ? "#374151" : "#E5E7EB";
+  const subtleColor = isDarkBackground ? "#FFFFFF" : "#000000";
+
+  // Button backgrounds - colorful backgrounds get lighter tinted versions
+  const buttonColors: Record<string, ColorProp> = {
+    "#1F2937": "#374151", // Dark -> slightly lighter gray
+    "#FFFFFF": "#E5E7EB", // White -> light gray
+    "#F97316": "#E5E7EB", // Orange -> light gray
+    "#3B82F6": "#60A5FA", // Blue -> lighter blue
+    "#22C55E": "#4ADE80", // Green -> lighter green
+    "#A855F7": "#C084FC", // Purple -> lighter purple
+    "#EC4899": "#F472B6", // Pink -> lighter pink
+  };
+  const buttonBg: ColorProp =
+    buttonColors[backgroundColor as string] || "#374151";
 
   return (
     <FlexWidget
@@ -94,7 +105,7 @@ export function CounterWidget({
           clickActionData={{ value: count, backgroundColor }}
         >
           <TextWidget
-            text="−"
+            text="-"
             style={{
               fontSize: 28,
               color: textColor,
